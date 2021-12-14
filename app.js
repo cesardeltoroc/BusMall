@@ -2,7 +2,7 @@
 
 // Create an array for all the images to be put into a bug catalog.
 const busCatalog = [];
-console.log('hey sis');
+// console.log('hey sis');
 // Create a counter
 let ATTEMPTS = 25;
 let clicks = 0;
@@ -30,7 +30,7 @@ function BusCatalog(name, fileExtension) {
 
 
 
-//executable code 
+//executable code
 new BusCatalog('bag', 'jpg');
 new BusCatalog('banana', 'jpg');
 new BusCatalog('bathroom', 'jpg');
@@ -84,23 +84,38 @@ function renderImg() {
 
 
 }
+// Starting chart
+function renderBusChart (){
+  const ctx = document.getElementById('chart').getContext('2d');
+
+  //
+  let imgName = [];
+  let imgVote = [];
+  let imgViews = [];
+
+  for(let i = 0; i < busCatalog.length; i++){
+    imgName.push(busCatalog[i].name);
+    imgVote.push(busCatalog[i].clicks);
+    imgViews.push(busCatalog[i].views);
+
+  }
+}
 
 
 //Ammount of times images were clickes and attempts run up at 25.
 function handleImgClick(e) {
   clicks++;
   let imageClicked = e.target.alt;
-  console.log(imageClicked);
+  // console.log(imageClicked);
 
   for (let i = 0; i < busCatalog.length; i++) {
     if (imageClicked === busCatalog[i].name) {
       busCatalog[i].clicks++;
     }
-    renderImg();
-
-    if (clicks === ATTEMPTS) {
-      displayImages.removeEventListener('click', handleImgClick);
-    }
+  }
+  renderImg();
+  if (clicks === ATTEMPTS) {
+    displayImages.removeEventListener('click', handleImgClick);
   }
 }
 
@@ -119,6 +134,8 @@ function handleButtonClick() {
 
 
 
+
+
 // Add event listener for images clicked.
 
 //Event 1
@@ -126,5 +143,8 @@ displayImages.addEventListener('click', handleImgClick);
 
 //Event 2
 button.addEventListener('click', handleButtonClick);
+
+//Display on startup of Website
+renderImg();
 
 
