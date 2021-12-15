@@ -1,7 +1,7 @@
 'use strict';
 
 // Create an array for all the images to be put into a bug catalog.
-const busCatalog = [];
+let busCatalog = [];
 // console.log('hey sis');
 // Create a counter
 let ATTEMPTS = 25;
@@ -28,28 +28,38 @@ function BusCatalog(name, fileExtension) {
   busCatalog.push(this);
 }
 
+// Step 3. If there is local data, grab it.
+let storedBus = localStorage.getItem('images');
 
 
-//executable code
-new BusCatalog('bag', 'jpg');
-new BusCatalog('banana', 'jpg');
-new BusCatalog('bathroom', 'jpg');
-new BusCatalog('boots', 'jpg');
-new BusCatalog('breakfast', 'jpg');
-new BusCatalog('bubblegum', 'jpg');
-new BusCatalog('chair', 'jpg');
-new BusCatalog('cthulhu', 'jpg');
-new BusCatalog('dog-duck', 'jpg');
-new BusCatalog('dragon', 'jpg');
-new BusCatalog('pen', 'jpg');
-new BusCatalog('pet-sweep', 'jpg');
-new BusCatalog('scissors', 'jpg');
-new BusCatalog('shark', 'jpg');
-new BusCatalog('sweep', 'png');
-new BusCatalog('tauntaun', 'jpg');
-new BusCatalog('unicorn', 'jpg');
-new BusCatalog('water-can', 'jpg');
-new BusCatalog('wine-glass', 'jpg');
+//Step 5. Using the local storage data grabbing it.
+if(storedBus){
+  // Step 4. Parse the data
+  let parsedBus = JSON.parse(storedBus);
+  busCatalog = parsedBus;
+}else{
+  //executable code
+  new BusCatalog('bag', 'jpg');
+  new BusCatalog('banana', 'jpg');
+  new BusCatalog('bathroom', 'jpg');
+  new BusCatalog('boots', 'jpg');
+  new BusCatalog('breakfast', 'jpg');
+  new BusCatalog('bubblegum', 'jpg');
+  new BusCatalog('chair', 'jpg');
+  new BusCatalog('cthulhu', 'jpg');
+  new BusCatalog('dog-duck', 'jpg');
+  new BusCatalog('dragon', 'jpg');
+  new BusCatalog('pen', 'jpg');
+  new BusCatalog('pet-sweep', 'jpg');
+  new BusCatalog('scissors', 'jpg');
+  new BusCatalog('shark', 'jpg');
+  new BusCatalog('sweep', 'png');
+  new BusCatalog('tauntaun', 'jpg');
+  new BusCatalog('unicorn', 'jpg');
+  new BusCatalog('water-can', 'jpg');
+  new BusCatalog('wine-glass', 'jpg');
+}
+
 
 //Function for random Index of images
 function getRandomIndex() {
@@ -73,11 +83,11 @@ function renderImg() {
   }
 
   let randomImgOne = currentImageRound[0];
-  console.log(currentImageRound[0]);
+  // console.log(currentImageRound[0]);
   let randomImgTwo = currentImageRound[1];
-  console.log(currentImageRound[1]);
+  // console.log(currentImageRound[1]);
   let randomImgThree = currentImageRound[2];
-  console.log(randomImgThree);
+  // console.log(randomImgThree);
 
   imageOne.src = busCatalog[randomImgOne].src;
   imageOne.alt = busCatalog[randomImgOne].name;
@@ -157,6 +167,15 @@ function handleImgClick(e) {
   renderImg();
   if (clicks === ATTEMPTS) {
     displayImages.removeEventListener('click', handleImgClick);
+
+    // Step 1.Stringify the data into a JSON so it can be stored locally.
+    let stringifiedBus = JSON.stringify(busCatalog);
+
+    // console.log(stringifiedBus);
+    // Step 2. Save to local storage.
+    localStorage.setItem('images', stringifiedBus);
+
+
   }
   if (clicks === ATTEMPTS){
     renderBusChart();
