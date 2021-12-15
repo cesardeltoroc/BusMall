@@ -57,35 +57,44 @@ function getRandomIndex() {
 }
 
 // rendering images into html using DOM
+let indexCollection = [];
+
 function renderImg() {
-
-  let RandomImgOne = getRandomIndex();
-  let RandomImgTwo = getRandomIndex();
-  let RandomImgThree = getRandomIndex();
-
-  while (RandomImgOne === RandomImgTwo) {
-    RandomImgOne = getRandomIndex();
+  let currentImageRound = [];
+  while (indexCollection.length < 5) {
+    let randoNum = getRandomIndex();
+    while (!indexCollection.includes(randoNum)) {
+      indexCollection.push(randoNum);
+      currentImageRound.push(randoNum);
+    }
   }
-  while (RandomImgThree === RandomImgTwo) {
-    RandomImgTwo = getRandomIndex();
+  for(let i = 0; i < 3; i++){
+    indexCollection.shift();
   }
 
-  imageOne.src = busCatalog[RandomImgOne].src;
-  imageOne.alt = busCatalog[RandomImgOne].name;
-  busCatalog[RandomImgOne].views++;
+  let randomImgOne = currentImageRound[0];
+  console.log(currentImageRound[0]);
+  let randomImgTwo = currentImageRound[1];
+  console.log(currentImageRound[1]);
+  let randomImgThree = currentImageRound[2];
+  console.log(randomImgThree);
 
-  imageTwo.src = busCatalog[RandomImgTwo].src;
-  imageTwo.alt = busCatalog[RandomImgTwo].name;
-  busCatalog[RandomImgTwo].views++;
+  imageOne.src = busCatalog[randomImgOne].src;
+  imageOne.alt = busCatalog[randomImgOne].name;
+  busCatalog[randomImgOne].views++;
 
-  imageThree.src = busCatalog[RandomImgThree].src;
-  imageThree.alt = busCatalog[RandomImgThree].name;
-  busCatalog[RandomImgThree].views++;
+  imageTwo.src = busCatalog[randomImgTwo].src;
+  imageTwo.alt = busCatalog[randomImgTwo].name;
+  busCatalog[randomImgTwo].views++;
+
+  imageThree.src = busCatalog[randomImgThree].src;
+  imageThree.alt = busCatalog[randomImgThree].name;
+  busCatalog[randomImgThree].views++;
 
 
 }
 // Starting chart
-function renderBusChart (){
+function renderBusChart() {
   const ctx = document.getElementById('chart').getContext('2d');
 
   //
@@ -93,13 +102,45 @@ function renderBusChart (){
   let imgVote = [];
   let imgViews = [];
 
-  for(let i = 0; i < busCatalog.length; i++){
+  for (let i = 0; i < busCatalog.length; i++) {
     imgName.push(busCatalog[i].name);
     imgVote.push(busCatalog[i].clicks);
     imgViews.push(busCatalog[i].views);
 
   }
+
+  let myChartData = {
+    type: 'bar',
+    data: {
+      labels: imgName,
+      datasets: [{
+        label: '# of Votes',
+        data: imgVote,
+        backgroundColor: ['red', ],
+        borderColor: ['red'],
+        borderWidth: 2,
+      },
+      {
+        label: '# of Views',
+        data: imgViews,
+        backgroundColor: ['blue'],
+        borderColor: ['blue'],
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+  new Chart(ctx, myChartData);
 }
+
+
 
 
 //Ammount of times images were clickes and attempts run up at 25.
@@ -117,23 +158,25 @@ function handleImgClick(e) {
   if (clicks === ATTEMPTS) {
     displayImages.removeEventListener('click', handleImgClick);
   }
-}
-
-//Results.
-function handleButtonClick() {
-  let finalResults= document.getElementById('present-results');
-  if (clicks === ATTEMPTS); {
-    for (let i = 0; i < busCatalog.length; i++) {
-      let li = document.createElement('li');
-      li.textContent = `${busCatalog[i].name} was viewed ${busCatalog[i].views} times and clicked ${busCatalog[i].clicks} times`;
-      finalResults.appendChild(li);
-
-    }
+  if (clicks === ATTEMPTS){
+    renderBusChart();
   }
 }
+renderImg();
 
+//Results.
+// function handleButtonClick() {
+//   let finalResults = document.getElementById('present-results');
+//   if (clicks === ATTEMPTS); {
+//     for (let i = 0; i < busCatalog.length; i++) {
+//       let li = document.createElement('li');
+//       li.textContent = `${busCatalog[i].name} was viewed ${busCatalog[i].views} times and clicked ${busCatalog[i].clicks} times`;
+//       finalResults.appendChild(li);
+//     }
+//     renderBusChart();
 
-
+//   }
+// }
 
 
 // Add event listener for images clicked.
@@ -142,9 +185,6 @@ function handleButtonClick() {
 displayImages.addEventListener('click', handleImgClick);
 
 //Event 2
-button.addEventListener('click', handleButtonClick);
+// button.addEventListener('click', handleButtonClick);
 
 //Display on startup of Website
-renderImg();
-
-
